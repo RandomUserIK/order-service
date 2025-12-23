@@ -22,3 +22,15 @@ server:
   netty:
     connection-timeout: 2s
     idle-timeout: 15s
+
+polar:
+  catalog-service:
+    webclient:
+      connectTimeout: 2s
+      readTimeout: 3s
+      backOffAttempts: 3
+      minBackOff: 100ms
+      jitterFactor: 0.5
+      serviceUri: "http://localhost:9001"
+      booksRootApi: "/books"
+      getBookByIsbnUri: "/books/{isbn}"

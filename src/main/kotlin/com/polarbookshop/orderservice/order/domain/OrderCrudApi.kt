@@ -6,5 +6,5 @@ import reactor.core.publisher.Mono
 interface OrderCrudApi {
 	fun findAll(): Flux<Order>
 
-	fun submitOrder(isbn: String, quantity: Int): Mono<Order>
+	fun submitOrder(order: Order): Mono<Order>
 }

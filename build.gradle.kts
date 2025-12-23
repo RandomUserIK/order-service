@@ -44,6 +44,8 @@ dependencies {
 	testImplementation("org.testcontainers:junit-jupiter")
 	testImplementation("org.testcontainers:postgresql")
 	testImplementation("org.testcontainers:r2dbc")
+	testImplementation("io.kotest:kotest-assertions-core-jvm:${property("kotest.version")}")
+	testImplementation("com.squareup.okhttp3:mockwebserver:${property("http3-mockwebserver.version")}")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
