@@ -14,6 +14,7 @@ class OrderWebConfiguration {
 		router {
 			"/orders".nest {
 				GET("", orderHandler::getAllOrders)
+				POST("", orderHandler::submitOrder)
 			}
 		}
 
