@@ -1,7 +1,3 @@
-import org.gradle.kotlin.dsl.named
-import org.springframework.boot.gradle.tasks.bundling.BootBuildImage
-import kotlin.apply
-
 plugins {
 	kotlin("jvm") version "1.9.25"
 	kotlin("plugin.spring") version "1.9.25"
