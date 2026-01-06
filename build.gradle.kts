@@ -1,3 +1,7 @@
+import org.gradle.kotlin.dsl.named
+import org.springframework.boot.gradle.tasks.bundling.BootBuildImage
+import kotlin.apply
+
 plugins {
 	kotlin("jvm") version "1.9.25"
 	kotlin("plugin.spring") version "1.9.25"
@@ -26,6 +30,7 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-validation")
 	implementation("org.springframework.boot:spring-boot-starter-webflux")
 	implementation("org.springframework.cloud:spring-cloud-starter-config")
+	implementation("org.springframework.boot:spring-boot-starter-actuator")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("io.projectreactor.kotlin:reactor-kotlin-extensions")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
@@ -65,4 +70,21 @@ dependencyManagement {
 
 tasks.withType<Test> {
 	useJUnitPlatform()
+}
+
+tasks.named<BootBuildImage>("bootBuildImage") {
+	imageName.set(project.name)
+	environment.set(
+		mapOf(
+			"BP_JVM_VERSION" to "21.*"
+		)
+	)
+
+	docker.apply {
+		publishRegistry.apply {
+			username.set(project.findProperty("registryUsername") as String?)
+			password.set(project.findProperty("registryToken") as String?)
+			url.set(project.findProperty("registryUrl") as String?)
+		}
+	}
 }

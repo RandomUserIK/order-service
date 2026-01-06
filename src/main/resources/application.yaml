@@ -36,6 +36,12 @@ server:
     connection-timeout: 2s
     idle-timeout: 15s
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: refresh
+
 polar:
   catalog-service:
     webclient:
