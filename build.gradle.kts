@@ -1,3 +1,7 @@
+import org.gradle.kotlin.dsl.named
+import org.springframework.boot.gradle.tasks.bundling.BootBuildImage
+import kotlin.apply
+
 plugins {
 	kotlin("jvm") version "1.9.25"
 	kotlin("plugin.spring") version "1.9.25"
@@ -25,6 +29,7 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-data-r2dbc")
 	implementation("org.springframework.boot:spring-boot-starter-validation")
 	implementation("org.springframework.boot:spring-boot-starter-webflux")
+	implementation("org.springframework.cloud:spring-cloud-starter-config")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("io.projectreactor.kotlin:reactor-kotlin-extensions")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
@@ -45,6 +50,7 @@ dependencies {
 	testImplementation("org.testcontainers:postgresql")
 	testImplementation("org.testcontainers:r2dbc")
 	testImplementation("io.kotest:kotest-assertions-core-jvm:${property("kotest.version")}")
+	testImplementation("com.squareup.okhttp3:okhttp:${property("http3-mockwebserver.version")}")
 	testImplementation("com.squareup.okhttp3:mockwebserver:${property("http3-mockwebserver.version")}")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
@@ -52,6 +58,12 @@ dependencies {
 kotlin {
 	compilerOptions {
 		freeCompilerArgs.addAll("-Xjsr305=strict")
+	}
+}
+
+dependencyManagement {
+	imports {
+		mavenBom("org.springframework.cloud:spring-cloud-dependencies:${property("spring-cloud.version")}")
 	}
 }
 
