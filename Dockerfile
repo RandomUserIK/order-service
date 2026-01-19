@@ -1,7 +1,7 @@
 FROM eclipse-temurin:21 AS builder
 WORKDIR workspace
 ARG JAR_FILE=build/libs/*.jar
-COPY ${JAR_FILE} catalog-service.jar
+COPY ${JAR_FILE} order-service.jar
 RUN java -Djarmode=layertools -jar order-service.jar extract
 
 FROM eclipse-temurin:21
