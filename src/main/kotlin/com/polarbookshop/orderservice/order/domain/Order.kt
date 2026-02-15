@@ -12,4 +12,6 @@ data class Order(
 	val status: OrderStatus,
 	val createdDate: Instant? = null,
 	val lastModifiedDate: Instant? = null,
+	val createdBy: String? = null,
+	val lastModifiedBy: String? = null,
 )

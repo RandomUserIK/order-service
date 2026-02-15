@@ -14,8 +14,8 @@ open class OrderR2DbcPersistenceAdapter(
 	override fun findById(id: Long): Mono<Order> =
 		orderRepository.findById(id).map { it.toDomain() }
 
-	override fun findAll(): Flux<Order> =
-		orderRepository.findAll().map { it.toDomain() }
+	override fun findAll(userId: String): Flux<Order> =
+		orderRepository.findAllByCreatedBy(userId).map { it.toDomain() }
 
 	@Transactional
 	override fun submitOrder(order: Order): Mono<Order> =

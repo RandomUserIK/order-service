@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.data.r2dbc.DataR2dbcTest
 import org.springframework.context.annotation.Import
+import org.springframework.security.test.context.support.WithMockUser
 import org.springframework.test.context.DynamicPropertyRegistry
 import org.springframework.test.context.DynamicPropertySource
 import org.testcontainers.containers.PostgreSQLContainer
@@ -57,6 +58,8 @@ internal class OrderRepositoryR2DbcTest @Autowired constructor(
 			status = OrderStatus.REJECTED,
 			createdDate = Instant.now(),
 			lastModifiedDate = Instant.now(),
+			createdBy = null,
+			lastModifiedBy = null,
 		)
 
 		// WHEN
@@ -69,6 +72,67 @@ internal class OrderRepositoryR2DbcTest @Autowired constructor(
 				it.id != null &&
 				it.version != 0 &&
 				it.status == OrderStatus.REJECTED
+			}
+			.verifyComplete()
+	}
+
+	@Test
+	fun whenCreateOrderNotAuthenticatedThenNoAuditMetadata() {
+		// GIVEN
+		val rejectedOrder = OrderEntity(
+			id = null,
+			version = 0,
+			bookIsbn = "1234567890",
+			quantity = 3,
+			bookName = null,
+			bookPrice = null,
+			status = OrderStatus.REJECTED,
+			createdDate = Instant.now(),
+			lastModifiedDate = Instant.now(),
+			createdBy = null,
+			lastModifiedBy = null,
+		)
+
+		// WHEN
+		val result = orderRepository.save(rejectedOrder)
+
+		// WHEN
+		StepVerifier
+			.create(result)
+			.expectNextMatches {
+				it.createdBy == null &&
+						it.lastModifiedBy == null
+			}
+			.verifyComplete()
+	}
+
+	@Test
+	@WithMockUser("john")
+	fun whenCreateOrderAuthenticatedThenAuditMetadata() {
+		// GIVEN
+		val rejectedOrder = OrderEntity(
+			id = null,
+			version = 0,
+			bookIsbn = "1234567890",
+			quantity = 3,
+			bookName = null,
+			bookPrice = null,
+			status = OrderStatus.REJECTED,
+			createdDate = Instant.now(),
+			lastModifiedDate = Instant.now(),
+			createdBy = null,
+			lastModifiedBy = null,
+		)
+
+		// WHEN
+		val result = orderRepository.save(rejectedOrder)
+
+		// WHEN
+		StepVerifier
+			.create(result)
+			.expectNextMatches {
+				it.createdBy == "john" &&
+						it.lastModifiedBy == "john"
 			}
 			.verifyComplete()
 	}
