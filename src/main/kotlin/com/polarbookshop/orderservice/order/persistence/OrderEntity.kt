@@ -2,8 +2,10 @@ package com.polarbookshop.orderservice.order.persistence
 
 import com.polarbookshop.orderservice.order.domain.Order
 import com.polarbookshop.orderservice.order.domain.OrderStatus
+import org.springframework.data.annotation.CreatedBy
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.Id
+import org.springframework.data.annotation.LastModifiedBy
 import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.data.annotation.Version
 import org.springframework.data.relational.core.mapping.Table
@@ -32,6 +34,12 @@ data class OrderEntity(
 
 	@LastModifiedDate
 	val lastModifiedDate: Instant,
+
+	@CreatedBy
+	val createdBy: String?,
+
+	@LastModifiedBy
+	val lastModifiedBy: String?,
 )
 
 internal fun OrderEntity.toDomain() =
@@ -45,6 +53,8 @@ internal fun OrderEntity.toDomain() =
 		status = status,
 		createdDate = createdDate,
 		lastModifiedDate = lastModifiedDate,
+		createdBy = createdBy,
+		lastModifiedBy = lastModifiedBy,
 	)
 
 internal fun Order.toEntity() =
@@ -58,4 +68,6 @@ internal fun Order.toEntity() =
 		status = status,
 		createdDate = createdDate ?: Instant.now(),
 		lastModifiedDate = lastModifiedDate ?: Instant.now(),
+		createdBy = createdBy,
+		lastModifiedBy = lastModifiedBy,
 	)
