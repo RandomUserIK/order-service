@@ -49,6 +49,12 @@ spring:
     password: ${spring.r2dbc.password}
     url: jdbc:postgresql://localhost:5432/polardb_order
 
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8080/realms/PolarBookshop
+
 server:
   port: 9002
   shutdown: graceful

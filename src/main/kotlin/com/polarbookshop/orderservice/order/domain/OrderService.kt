@@ -16,8 +16,8 @@ class OrderService(
 ) {
 	private val logger = KotlinLogging.logger { }
 
-	fun getAllOrders() =
-		orderCrudApi.findAll()
+	fun getAllOrders(userId: String) =
+		orderCrudApi.findAll(userId)
 
 	fun submitOrder(isbn: String, quantity: Int) =
 		catalogServiceApi
