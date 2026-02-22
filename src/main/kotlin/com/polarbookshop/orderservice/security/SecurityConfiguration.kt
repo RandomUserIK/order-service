@@ -16,7 +16,9 @@ class SecurityConfiguration {
 	fun filterChain(http: ServerHttpSecurity): SecurityWebFilterChain =
 		http
 			.authorizeExchange {
-				it.anyExchange().authenticated()
+				it
+					.pathMatchers("/actuator/**").permitAll()
+					.anyExchange().authenticated()
 			}
 			.oauth2ResourceServer {
 				it.jwt(Customizer.withDefaults())

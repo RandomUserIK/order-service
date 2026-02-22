@@ -3,6 +3,7 @@ package com.polarbookshop.orderservice.order.web
 import com.polarbookshop.orderservice.order.domain.Order
 import com.polarbookshop.orderservice.order.domain.OrderRequest
 import com.polarbookshop.orderservice.order.domain.OrderService
+import io.github.oshai.kotlinlogging.KotlinLogging
 import org.springframework.http.MediaType
 import org.springframework.security.oauth2.jwt.Jwt
 import org.springframework.web.reactive.function.BodyInserters
@@ -16,9 +17,11 @@ import reactor.core.publisher.Mono
 class OrderHandler(
 	private val orderService: OrderService,
 ) {
+	private val logger = KotlinLogging.logger { }
 
-	fun getAllOrders(request: ServerRequest): Mono<ServerResponse> =
-		request.principal()
+	fun getAllOrders(request: ServerRequest): Mono<ServerResponse> {
+		logger.info { "Fetching all orders" }
+		return request.principal()
 			.cast(Jwt::class.java)
 			.map { it.subject }
 			.flatMap { subject ->
@@ -30,9 +33,11 @@ class OrderHandler(
 							.bodyValue(orders)
 					}
 			}
+	}
 
 	fun submitOrder(request: ServerRequest): Mono<ServerResponse> =
 		request.bodyToMono<OrderRequest>().flatMap { (bookIsbn, quantity) ->
+			logger.info { "Order for $quantity copies of the book with ISBN $bookIsbn" }
 			ok()
 				.contentType(MediaType.APPLICATION_JSON)
 				.body<Order>(orderService.submitOrder(bookIsbn, quantity))
